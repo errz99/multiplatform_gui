@@ -1,0 +1,22 @@
+[package]
+name = "multiplatform_gui"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Dependencias comunes, si las hay
+
+[target.'cfg(target_os = "linux")'.dependencies]
+gtk4 = "0.9.6"
+
+[target.'cfg(target_os = "freebsd")'.dependencies]
+gtk4 = "0.9.6"
+
+[target.'cfg(target_os = "windows")'.dependencies]
+windows = "0.60.0"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+cocoa = "0.26.0"
+# o puedes elegir entre las otras opciones mencionadas
+# objc = "0.2.7"
+# objc-rs = "0.2.8"
