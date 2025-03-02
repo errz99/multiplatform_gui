@@ -106,10 +106,14 @@ mod platform {
     extern crate cocoa;
     use cocoa::appkit::{
         NSApp, NSApplication, NSApplicationActivationPolicyRegular, NSBackingStoreBuffered,
-        NSWindow, NSWindowStyleMask,
+        NSButton, NSView, NSViewHeightSizable, NSViewWidthSizable, NSWindow, NSWindowStyleMask,
     };
-    use cocoa::base::{nil, YES};
-    use cocoa::foundation::{NSAutoreleasePool, NSPoint, NSRect, NSSize};
+    use cocoa::base::{nil, NO, YES};
+    use cocoa::foundation::{NSAutoreleasePool, NSPoint, NSRect, NSSize, NSString};
+    // use objc::msg_send;
+
+    // use objc::runtime::Object;
+    use objc::{msg_send, sel, sel_impl};
 
     pub fn run() {
         unsafe {
@@ -127,8 +131,20 @@ mod platform {
             );
 
             window.cascadeTopLeftFromPoint_(NSPoint::new(20.0, 20.0));
-            window.setTitle_("Multiplatform GUI");
+            let title = NSString::alloc(nil).init_str("Hello World!");
+            NSWindow::setTitle_(window, title);
             window.makeKeyAndOrderFront_(nil);
+
+            let button = NSButton::initWithFrame_(
+                NSButton::alloc(nil),
+                NSRect::new(NSPoint::new(350.0, 275.0), NSSize::new(100.0, 50.0)),
+            );
+
+            NSButton::setTitle_(button, NSString::alloc(nil).init_str("Click Me"));
+            button.setAutoresizingMask_(NSViewWidthSizable | NSViewHeightSizable);
+            window.contentView().addSubview_(button);
+
+            let _: () = msg_send![window.contentView(), setAutoresizesSubviews: YES];
 
             app.run();
         }
